@@ -33,6 +33,10 @@ module.exports = function(sequelize, DataTypes) {
       longitude: {
         type: DataTypes.DECIMAL(9, 6),
         defaultValue: null
+      },
+      selected: {
+        type: DataTypes.BOOLEAN, 
+        defaultValue: false
       }
     }, {
         timestamps: false
@@ -41,7 +45,10 @@ module.exports = function(sequelize, DataTypes) {
 
     Store.associate = function(models) {
         // Associating Stores with Supervisors
-        Store.hasMany(models.Supervisor);
+        Store.hasMany(models.Supervisor,{
+          //onDelete: "null"
+          //onUpdate: "cascade"
+        });
       };
   
     return Store;

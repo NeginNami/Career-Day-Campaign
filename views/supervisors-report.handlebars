@@ -1,0 +1,41 @@
+
+<div class="jumbotron">
+	<h1 class="all-supervisors-title">List Of Supervisors</h1>
+	<div id="jumb-description">
+		<p class="all-supervisors-title">Total Hosts (Supervisors who selected a store): {{totalHosts}} </p>
+		<p class="all-supervisors-title">Participation User Percentage: {{participation}} </p>
+	</div>
+
+</div>
+
+<div class="container">
+	
+	<table class="table table-bordered">
+				<thead>
+			<tr>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Email</th>
+				<th>Region</th>
+				<th>Store Selected ID</th>
+				<th>Store Selected Name</th>
+				<th>Store Selected Region</th>
+				<th>Links to supervisor form</th>
+			</tr>
+			</thead>
+			<tbody>
+				{{#each supervisors}}
+					<tr>
+						<td>{{this.firstname}}</td>
+						<td>{{this.lastname}}</td>
+						<td>{{this.email}}</td>
+						<td>{{this.region}}</td>
+						<td>{{this.StoreId}}</td>
+						<td>{{this.Store.name}}</td>
+						<td>{{this.Store.region}}</td>
+						<td><a href="../supervisors/{{this.lastname}}">Click Me</a></td>
+					</tr>
+				{{/each}}
+			</tbody>  		
+		</table>
+	</div>
