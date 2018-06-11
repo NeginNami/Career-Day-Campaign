@@ -19,17 +19,23 @@ router.get("/reports/all-supervisors", function(req, res) {
         //console.log(allSuper);
         res.render("supervisors-report", {supervisors: dbsupervisors});
     }); */
-    db.Supervisor.findAll( {include: [db.Store], raw:true}).then(function(dbsupervisors) {
+    db.Supervisor.findAll( {include: [db.Store]}).then(function(dbsupervisors) {
         //console.log(dbsupervisors);
         //res.json(dbsupervisors);
         //var allSuper={ supervisors: dbsupervisors };
         //console.log(dbsupervisors);
-        var totalHosts=0;
+        var totalHosts=dbsupervisors.length;;
         var participation=0;
-        console.log(dbsupervisors[2]);
-        //JSON.parse();
+        var actives=0;
         
-
+        console.log(dbsupervisors[2].dataValues.StoreId);
+        //JSON.parse();
+        for(i=0;i<totalHosts;i++){
+            if(dbsupervisors[i].dataValues.StoreId)
+                actives++;
+        } 
+        participation=(actives/totalHosts*100).toFixed(2);
+    
 
         res.render("supervisors-report", {supervisors: dbsupervisors, totalHosts,participation});
         //res.json({supervisors: dbsupervisors, totalHosts,participation});
