@@ -48,9 +48,10 @@ router.get("/reports/all-supervisors", function(req, res) {
 router.get("/reports/all-stores", function(req, res) {
     res.send("All Stores Information");
 });
-router.get("/supervisors/:name", function(req, res) {
- 
-    res.send("Form For A Supervisor");
+router.get("/supervisors/:name&:lastName", function(req, res) {
+    var name=req.params.name;
+    var lastName=req.params.lastName;
+    res.render("supervisor-form",{name,lastName});
 });
 router.post("/supervisors/:name", function(req, res) {
     res.send("Post Route for registering a store as a host");
