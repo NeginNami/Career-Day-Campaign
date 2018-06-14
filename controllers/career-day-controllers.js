@@ -48,6 +48,14 @@ router.get("/reports/all-supervisors", function(req, res) {
 router.get("/reports/all-stores", function(req, res) {
     res.send("All Stores Information");
 });
+
+router.get("/all-stores", function(req, res) {
+    db.Store.findAll().then(function(dbStore){
+        //console.log(dbStore[1].dataValues);
+        res.json(dbStore);
+    });
+});
+
 router.get("/supervisors/:name&:lastName", function(req, res) {
     var name=req.params.name;
     var lastName=req.params.lastName;
@@ -56,6 +64,21 @@ router.get("/supervisors/:name&:lastName", function(req, res) {
 router.post("/supervisors/:name", function(req, res) {
     res.send("Post Route for registering a store as a host");
 });
+
+router.put("/stores/update/:id", function(req, res) {
+
+    db.Supervisor.update(
+      {StoreId:req.params.id},
+      {
+        where: {
+          firstname: req.body.firstname,
+          lastname:  req.body.lastname
+        }
+      }
+      ).then(function(dbsupervisors) {
+        res.json(dbsupervisors);
+      });
+  });
 
 
 

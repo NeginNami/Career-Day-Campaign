@@ -1,26 +1,24 @@
 
 <div class="container" id="form-container">
-  <h3>Welcome {{name}} {{lastName}}</h3>
-  <p>Please select the store you desire to be your host: </p>
-  
-
-
-<form id="choose-store-form">
-  <div class="form-group">
-    <label for="storeID">Desired Store:</label>
     <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6"><input type="text" class="form-control" id="storeID" placeholder="Enter Store ID"></div>
-        <div class="col-lg-6 col-md-6 col-sm-6"></div>
-       
+        <div class="col-lg-12 col-md-12 col-sm-12">
+             <h3>Welcome <span id="name">{{name}}</span> <span id="lastName">{{lastName}}</span></h3>
+            <p>Please select the store you desire to be your host: </p>
+        </div>
     </div>
-    
-  </div>
-
  
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-    
+  
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <form id="choose-store-form">
+                <div class="form-group">
+                    <label for="storeID">Desired Store:</label>
+                    <input type="text" class="form-control" id="storeID" placeholder="Enter Store ID">  
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6"></div>
+    </div>
 
-  
-  
 </div>
