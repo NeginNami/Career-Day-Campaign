@@ -7,17 +7,17 @@ $(document).ready(function(){
         var lastName=$("#lastName").text();
         var found = false;
 
-        console.log(name);
+      /*  console.log(name);
         console.log(lastName);
         console.log(storeID);
 
-        console.log(storeID.length);
+        console.log(storeID.length); */
 
         if(storeID.length!==3 || isNaN(storeID))
             alert("The store number you entered is not valid, please try again.");
         else{
             $.get("/all-stores", function(data) {
-                console.log(data);
+                //console.log(data);
                 for(i=0;i<data.length;i++){
                     if(data[i].id==storeID)
                         found=true;
@@ -32,7 +32,7 @@ $(document).ready(function(){
                       })
                       .done(function(data) {
                         console.log(data);
-                        console.log("done");
+                        alert("Thanks! Store # "+storeID+" has been selected as your host.");
                       });
                 } else{
                     alert("Your desired store ID can not be found.")

@@ -28,7 +28,7 @@ router.get("/reports/all-supervisors", function(req, res) {
         var participation=0;
         var actives=0;
         
-        console.log(dbsupervisors[2].dataValues.StoreId);
+        //console.log(dbsupervisors[2].dataValues.StoreId);
         //JSON.parse();
         for(i=0;i<totalHosts;i++){
             if(dbsupervisors[i].dataValues.StoreId)
@@ -37,7 +37,7 @@ router.get("/reports/all-supervisors", function(req, res) {
         participation=(actives/totalHosts*100).toFixed(2);
     
 
-        res.render("supervisors-report", {supervisors: dbsupervisors, totalHosts,participation});
+        res.render("supervisors-report", {supervisors: dbsupervisors, actives,participation});
         //res.json({supervisors: dbsupervisors, totalHosts,participation});
     });
 
@@ -76,7 +76,18 @@ router.put("/stores/update/:id", function(req, res) {
         }
       }
       ).then(function(dbsupervisors) {
-        res.json(dbsupervisors);
+        //console.log(dbsupervisors[0].dataValues);
+        //res.json(dbsupervisors);
+            db.Store.update(
+                {selected:true},
+                {
+                    where:{
+                        id:req.params.id
+                    }
+                }
+            ).then(function(dbStore){
+                res.json(dbStore);
+            });
       });
   });
 
