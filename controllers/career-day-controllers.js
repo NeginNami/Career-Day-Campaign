@@ -103,8 +103,7 @@ router.put("/stores/update/:id", function(req, res) {
           
         //console.log(Super[0].dataValues);
         storeid=Super[0].dataValues.StoreId;
-      }).then(
-          db.Supervisor.findAll().then(function (allSuper){
+        db.Supervisor.findAll().then(function (allSuper){
             //console.log(allSuper[3].dataValues);
             for(i=0;i<allSuper.length;i++)
                 if(allSuper[i].dataValues.StoreId==storeid)
@@ -118,13 +117,25 @@ router.put("/stores/update/:id", function(req, res) {
                             id: storeid
                         }
                     }
-                ).then(function(dbsupervisors){
-                    res.json(dbsupervisors);
-            
-                });
+                );
           })
-      );
+      })
 
+      .then(function(){
+        db.Supervisor.update(
+            {StoreId:null},
+            {
+                where:{
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname
+                }
+            }
+        )})
+        .then(function(dbsupervisors){
+            res.json(dbsupervisors);
+    
+        });
+      
  /*   db.Supervisor.update(
         {StoreId:null},
         {
