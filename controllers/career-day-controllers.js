@@ -91,6 +91,19 @@ router.put("/stores/update/:id", function(req, res) {
       });
   });
 
+  router.put("/supervisors/remove-selected-store", function(req, res) {
+    db.Supervisor.update(
+        {StoreId:null},
+        {
+            where:{
+                firstname: req.body.firstname,
+                lastname: req.body.lastname
+            }
+        }
+    ).then(function(dbsupervisors){
+        res.json(dbsupervisors);
+    });
+});
 
 
 

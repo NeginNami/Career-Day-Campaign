@@ -12,3 +12,6 @@ text-align: center;
 #choose-store-form{
     margin-top: 30px;
 }
+.warning{
+    color: red;
+}
