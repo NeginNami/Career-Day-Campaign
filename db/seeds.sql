@@ -1,6 +1,6 @@
 USE PandaExpress;
 
-INSERT INTO `prg_sample_storelist` (`id`, `name`, `region`, `ship_address`, `ship_city`, `ship_state`, `ship_zip`, `latitude`, `longitude`)
+INSERT INTO `Stores` (`id`, `name`, `region`, `ship_address`, `ship_city`, `ship_state`, `ship_zip`, `latitude`, `longitude`)
 VALUES
 	(100,'GLENDALE GALL. PX I','WLA','3214 Glendale Galleria','Glendale','CA','91210',34.145179,-118.259410),
 	(101,'WESTSIDE PX','WLA','10800 West Pico Blvd. #310','Los Angeles','CA','90064',34.033157,-118.423979),
@@ -301,7 +301,7 @@ VALUES
 
 ;
 
-INSERT INTO `prg_sample_supervisor` (`id`, `firstname`, `lastname`, `email`, `region`)
+INSERT INTO `Supervisors` (`id`, `firstname`, `lastname`, `email`, `region`)
 VALUES
 	(151411,'Rodrick','Parlier','rparlier@example.com','GLA'),
 	(119803,'Angelia','Honda','ahonda@example.com','WLA'),
