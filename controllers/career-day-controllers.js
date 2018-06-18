@@ -121,7 +121,7 @@ router.put("/stores/update/:id", function(req, res) {
           })
       })
 
-      .then(function(){
+      .then( (
         db.Supervisor.update(
             {StoreId:null},
             {
@@ -130,24 +130,15 @@ router.put("/stores/update/:id", function(req, res) {
                     lastname: req.body.lastname
                 }
             }
-        )})
+        ))
         .then(function(dbsupervisors){
             res.json(dbsupervisors);
+            console.log(dbsupervisors);
     
-        });
+        })
+    );
       
- /*   db.Supervisor.update(
-        {StoreId:null},
-        {
-            where:{
-                firstname: req.body.firstname,
-                lastname: req.body.lastname
-            }
-        }
-    ).then(function(dbsupervisors){
-        res.json(dbsupervisors);
 
-    });  */
 });
 
 
