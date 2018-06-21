@@ -1,0 +1,38 @@
+
+<div class="jumbotron">
+	<h1 class="all-supervisors-title">List Of Stores</h1>
+	<div id="jumb-description">
+		<p class="all-supervisors-title">Total Hosts: {{totalHosts}} </p>
+		<p class="all-supervisors-title">Total Surrounding Stores: {{totalSurrounding}} </p>
+        <p class="all-supervisors-title">Total General Stores: {{totalGenerals}} </p>
+	</div>
+
+</div>
+
+<div class="container">
+	
+	<table class="table table-bordered">
+				<thead>
+			<tr>
+				<th>ID</th>
+				<th>Store Name</th>
+				<th>Store Type</th>
+				<th>Store Region</th>
+                <th>Closest Host ID<br>(for surrounding stores)</th>
+                <th>Distance to the Closest Host Store<br>(for surrounding stores)</th>
+			
+			</tr>
+			</thead>
+			<tbody>
+				{{#each stores}}
+					<tr>
+						<td>{{this.id}}</td>
+						<td>{{this.name}}</td>
+						<td>{{this.status}}</td>
+						<td>{{this.region}}</td>
+						
+					</tr>
+				{{/each}}
+			</tbody>  		
+		</table>
+	</div>

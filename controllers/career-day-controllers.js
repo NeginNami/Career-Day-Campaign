@@ -45,9 +45,7 @@ router.get("/reports/all-supervisors", function(req, res) {
 
 
 });
-router.get("/reports/all-stores", function(req, res) {
-    res.send("All Stores Information");
-});
+
 
 router.get("/all-stores", function(req, res) {
     db.Store.findAll().then(function(dbStore){
@@ -141,7 +139,101 @@ router.put("/stores/update/:id", function(req, res) {
 
 });
 
+router.get("/reports/all-stores", function(req, res) {
+    updateStatus();
+     //res.render("stores-report",{stores:[{id:"123",name:"bahbh", type:"General", region:"empty"}]});
+     db.Store.findAll().then(function(dbstores) {
+      
+         var totalHosts=0;
+         var totalGenerals=0;
+         var totalSurrounding=0;
+         
+         
+         for(i=0;i<dbstores.length;i++){
+             if(dbstores[i].dataValues.status=="Host")
+                 totalHosts++;
+             if(dbstores[i].dataValues.status=="General")
+                 totalGenerals++;
+             if(dbstores[i].dataValues.status=="Surrounding")
+                 totalSurrounding++;
+         } 
+         
+     
+ 
+         res.render("stores-report", {stores: dbstores, totalHosts,totalGenerals,totalSurrounding});
+         //res.json({supervisors: dbsupervisors, totalHosts,participation});
+     });
+ 
+     
+ 
+ 
+ });
 
+function updateStatus(){
+    //console.log("function");
+    var storesArray=[];
+    db.Store.findAll().then(function(dbStore){
+        //console.log(dbStore[0].dataValues);
+        for(i=0;i<dbStore.length;i++){
+            var storeEntry={
+                id:dbStore[i].dataValues.id,
+                status:dbStore[i].dataValues.status,
+                lat:dbStore[i].dataValues.latitude,
+                long:dbStore[i].dataValues.longitude    
+            };
+            storesArray.push(storeEntry);
+            //console.log(storesArray);
+        }
+        for(i=0;i<dbStore.length;i++){
+            if(dbStore[i].dataValues.selected)
+                storesArray[i].status="Host"
+        }
+        console.log(storesArray);
+        // mark all the stores with Host or Surrounding lables
+        for(i=0;i<storesArray.length;i++)
+            if(storesArray[i].status=="General")
+                for(j=i+1;j<storesArray.length;j++){
+                    //checking the distances
+                    if(storesArray[j].status=="Host"){
+                      /*  var xSub= storesArray[j].long - storesArray[i].long;
+                        var Ysub= storesArray[j].lat - storesArray[i].lat;
+                        var distance= Math.sqrt(Math.pow(xSub,2)+Math.pow(Ysub,2)); */
+                        var dist= distance(storesArray[i].lat,storesArray[i].long,storesArray[j].lat,storesArray[j].long);
+                        console.log(dist);
+                        if(dist<15){
+                            storesArray[i].status="Surrounding"; 
+                            //console.log(storesArray);
+                        }
+                         
+                        
+                    }
+
+                    
+
+                }
+                
+                console.log(storesArray);
+
+                    
+    });
+}
+
+function distance(lat1, lon1, lat2, lon2, unit) {
+        var radlat1 = Math.PI * lat1/180;
+        var radlat2 = Math.PI * lat2/180;
+        var radlon1 = Math.PI * lon1/180;
+        var radlon2 = Math.PI * lon2/180;
+        var theta = lon1-lon2;
+        var radtheta = Math.PI * theta/180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        dist = Math.acos(dist);
+        dist = dist * 180/Math.PI;
+        dist = dist * 60 * 1.1515;
+        if (unit=="K") { dist = dist * 1.609344 }
+        if (unit=="N") { dist = dist * 0.8684 }
+        //console.log(dist);
+        return dist;
+}
 
 
 

@@ -37,6 +37,10 @@ module.exports = function(sequelize, DataTypes) {
       selected: {
         type: DataTypes.BOOLEAN, 
         defaultValue: false
+      },
+      status:{
+        type:DataTypes.STRING,
+        defaultValue: "General"
       }
     }, {
         timestamps: false
