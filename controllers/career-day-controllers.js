@@ -84,6 +84,7 @@ router.put("/stores/update/:id", function(req, res) {
                     }
                 }
             ).then(function(dbStore){
+                updateStatus();
                 res.json(dbStore);
             });
       });
@@ -130,9 +131,8 @@ router.put("/stores/update/:id", function(req, res) {
             }
         ))
         .then(function(dbsupervisors){
+            updateStatus();
             res.json(dbsupervisors);
-            console.log(dbsupervisors);
-    
         })
     );
       
@@ -177,7 +177,7 @@ function updateStatus(){
         for(i=0;i<dbStore.length;i++){
             var storeEntry={
                 id:dbStore[i].dataValues.id,
-                status:dbStore[i].dataValues.status,
+                status:"General",
                 lat:dbStore[i].dataValues.latitude,
                 long:dbStore[i].dataValues.longitude    
             };
@@ -212,7 +212,17 @@ function updateStatus(){
 
                 }
                 
-                console.log(storesArray);
+        console.log(storesArray);
+        // Now changing the status of our entries in database according to the evaluated array
+        storesArray.forEach(function(store){
+            db.Store.update({status:store.status},
+            {
+                where:{
+                    id:store.id
+                }
+            });
+        });
+                
 
                     
     });

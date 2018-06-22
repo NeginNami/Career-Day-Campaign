@@ -16,7 +16,7 @@ $(document).ready(function(){
         if(storeID.length==0) deleteDesire=true;
         console.log(storeID);
 
-        if((storeID.length!==3 && !deleteDesire) || isNaN(storeID))
+        if((storeID.length<3 && !deleteDesire) || isNaN(storeID))
             alert("The store number you entered is not valid, please try again.");
                 else if (!deleteDesire) {
                     
