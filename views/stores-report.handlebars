@@ -18,8 +18,8 @@
 				<th>Store Name</th>
 				<th>Store Type</th>
 				<th>Store Region</th>
-                <th>Closest Host ID<br>(for surrounding stores)</th>
-                <th>Distance to the Closest Host Store<br>(for surrounding stores)</th>
+                <th>Closest Host ID<br>( for surrounding stores )</th>
+                <th>Distance to the Closest Host Store ( miles )<br>( for surrounding stores )</th>
 			
 			</tr>
 			</thead>
@@ -30,6 +30,8 @@
 						<td>{{this.name}}</td>
 						<td>{{this.status}}</td>
 						<td>{{this.region}}</td>
+                        <td>{{this.closestHostId}}</td>
+                        <td>{{this.distanceToClosestHost}}</td>
 						
 					</tr>
 				{{/each}}

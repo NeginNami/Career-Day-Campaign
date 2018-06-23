@@ -140,34 +140,127 @@ router.put("/stores/update/:id", function(req, res) {
 });
 
 router.get("/reports/all-stores", function(req, res) {
-    updateStatus();
-     //res.render("stores-report",{stores:[{id:"123",name:"bahbh", type:"General", region:"empty"}]});
-     db.Store.findAll().then(function(dbstores) {
+    //closestHost();
+    //var myArr= [1,2];
+    //var myArr=closestHost();
+    //console.log(myArr); 
+    
+    db.Store.findAll().then(function(dbStore) {
       
          var totalHosts=0;
          var totalGenerals=0;
          var totalSurrounding=0;
          
          
-         for(i=0;i<dbstores.length;i++){
-             if(dbstores[i].dataValues.status=="Host")
+         for(i=0;i<dbStore.length;i++){
+             if(dbStore[i].dataValues.status=="Host")
                  totalHosts++;
-             if(dbstores[i].dataValues.status=="General")
+             if(dbStore[i].dataValues.status=="General")
                  totalGenerals++;
-             if(dbstores[i].dataValues.status=="Surrounding")
+             if(dbStore[i].dataValues.status=="Surrounding")
                  totalSurrounding++;
          } 
+
+         var storesArray=[];
+         for(i=0;i<dbStore.length;i++){
+             var storeEntry={
+                 id:dbStore[i].dataValues.id,
+                 name:dbStore[i].dataValues.name,
+                 region:dbStore[i].dataValues.region,
+                 status:dbStore[i].dataValues.status,
+                 lat:dbStore[i].dataValues.latitude,
+                 long:dbStore[i].dataValues.longitude,
+                 closestHostId: "----"  ,
+                 distanceToClosestHost: "----"    
+             };
+             storesArray.push(storeEntry);
+             //console.log("pushed!");
+         }
+ 
+         for(i=0;i<storesArray.length;i++){
+ 
+             if(storesArray[i].status=="Surrounding"){
+                 var minDist=1000000;
+                 var closestId=0;
+                 for(j=0;j<storesArray.length;j++)
+                     if(storesArray[j].status=="Host"){
+                         var dist= distance(storesArray[i].lat,storesArray[i].long,storesArray[j].lat,storesArray[j].long);
+                         console.log(dist);
+                         if(dist<minDist){
+                             minDist=dist;
+                             closestId=storesArray[j].id;
+                         }
+                             
+                     }
+                 storesArray[i].distanceToClosestHost=minDist.toFixed(2);
+                 storesArray[i].closestHostId=closestId;
+             }
+               
+                        
+         }
+         console.log(storesArray);
          
      
  
-         res.render("stores-report", {stores: dbstores, totalHosts,totalGenerals,totalSurrounding});
+         res.render("stores-report", {stores: storesArray, totalHosts,totalGenerals,totalSurrounding});
          //res.json({supervisors: dbsupervisors, totalHosts,participation});
-     });
+     });    
  
      
  
  
  });
+
+function closestHost(){
+    //var storesArray1=[];
+    db.Store.findAll().then(function(dbStore){
+        var storesArray=[];
+        for(i=0;i<dbStore.length;i++){
+            var storeEntry={
+                id:dbStore[i].dataValues.id,
+                name:dbStore[i].dataValues.name,
+                region:dbStore[i].dataValues.region,
+                status:dbStore[i].dataValues.status,
+                lat:dbStore[i].dataValues.latitude,
+                long:dbStore[i].dataValues.longitude,
+                closestHostId: "----"  ,
+                distanceToClosestHost: "----"    
+            };
+            storesArray.push(storeEntry);
+            //console.log("pushed!");
+        }
+
+        for(i=0;i<storesArray.length;i++){
+
+            if(storesArray[i].status=="Surrounding"){
+                var minDist=1000000;
+                var closestId=0;
+                for(j=0;j<storesArray.length;j++)
+                    if(storesArray[j].status=="Host"){
+                        var dist= distance(storesArray[i].lat,storesArray[i].long,storesArray[j].lat,storesArray[j].long);
+                        console.log(dist);
+                        if(dist<minDist){
+                            minDist=dist;
+                            closestId=storesArray[j].id;
+                        }
+                            
+                    }
+                storesArray[i].distanceToClosestHost=minDist;
+                storesArray[i].closestHostId=closestId;
+            }
+              
+                       
+        }
+        //console.log(storesArray);
+        //return storesArray;
+
+    });
+    return storesArray1;
+}
+
+
+
+
 
 function updateStatus(){
     //console.log("function");
@@ -188,7 +281,7 @@ function updateStatus(){
             if(dbStore[i].dataValues.selected)
                 storesArray[i].status="Host"
         }
-        console.log(storesArray);
+        //console.log(storesArray);
         // mark all the stores with Host or Surrounding lables
         for(i=0;i<storesArray.length;i++)
             if(storesArray[i].status=="General")
@@ -199,7 +292,7 @@ function updateStatus(){
                         var Ysub= storesArray[j].lat - storesArray[i].lat;
                         var distance= Math.sqrt(Math.pow(xSub,2)+Math.pow(Ysub,2)); */
                         var dist= distance(storesArray[i].lat,storesArray[i].long,storesArray[j].lat,storesArray[j].long);
-                        console.log(dist);
+                        //console.log(dist);
                         if(dist<15){
                             storesArray[i].status="Surrounding"; 
                             //console.log(storesArray);
@@ -212,7 +305,7 @@ function updateStatus(){
 
                 }
                 
-        console.log(storesArray);
+        //console.log(storesArray);
         // Now changing the status of our entries in database according to the evaluated array
         storesArray.forEach(function(store){
             db.Store.update({status:store.status},
@@ -224,7 +317,7 @@ function updateStatus(){
         });
                 
 
-                    
+        console.log("statuses updated");            
     });
 }
 
