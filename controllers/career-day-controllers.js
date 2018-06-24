@@ -7,7 +7,10 @@ var db = require('../models');
 
 // Create all our routes and set up logic within those routes where required.
 router.get("/", function(req, res) {
-    res.send("Home Page");
+    res.render("home-page");
+});
+router.get("/login", function(req, res) {
+    res.render("login");
 });
 router.get("/reports/all-supervisors", function(req, res) {
     //res.send("All Supervisor Information");
