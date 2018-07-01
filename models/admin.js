@@ -4,11 +4,17 @@ module.exports = function(sequelize, DataTypes) {
 
       username: {
             type: DataTypes.STRING,
-            defaultValue: null
+            allowNull: false,
+            unique: true,
+            validate: {
+              is: /^[a-z0-9\_\-]+$/i,
+            }
           },
       password: {
-        type: DataTypes.STRING,
-        defaultValue: null
+        type: DataTypes.STRING
+      },
+      salt: {
+        type: DataTypes.STRING
       }
     }, 
     {

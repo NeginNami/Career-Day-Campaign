@@ -12,27 +12,17 @@ router.get("/", function(req, res) {
 router.get("/login", function(req, res) {
     res.render("login");
 });
+router.get("/dashboard", function(req, res) {
+    res.render("dashboard");
+});
 router.get("/reports/all-supervisors", function(req, res) {
-    //res.send("All Supervisor Information");
 
-  /*  db.Supervisor.findAll({ raw: true}).then(function(dbsupervisors) {
-        //console.log(dbsupervisors);
-        //res.json(dbsupervisors);
-        //var allSuper={ supervisors: dbsupervisors };
-        //console.log(allSuper);
-        res.render("supervisors-report", {supervisors: dbsupervisors});
-    }); */
     db.Supervisor.findAll( {include: [db.Store]}).then(function(dbsupervisors) {
-        //console.log(dbsupervisors);
-        //res.json(dbsupervisors);
-        //var allSuper={ supervisors: dbsupervisors };
-        //console.log(dbsupervisors);
+   
         var totalHosts=dbsupervisors.length;;
         var participation=0;
         var actives=0;
-        
-        //console.log(dbsupervisors[2].dataValues.StoreId);
-        //JSON.parse();
+
         for(i=0;i<totalHosts;i++){
             if(dbsupervisors[i].dataValues.StoreId)
                 actives++;
@@ -41,7 +31,7 @@ router.get("/reports/all-supervisors", function(req, res) {
     
 
         res.render("supervisors-report", {supervisors: dbsupervisors, actives,participation});
-        //res.json({supervisors: dbsupervisors, totalHosts,participation});
+        
     });
 
 
