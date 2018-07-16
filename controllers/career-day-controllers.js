@@ -59,16 +59,11 @@ router.get("/reports/all-supervisors",isAuthenticated, function(req, res) {
         res.render("supervisors-report", {supervisors: dbsupervisors, actives,participation});
         
     });
-
-
-
-
 });
 
 
 router.get("/all-stores", function(req, res) {
     db.Store.findAll().then(function(dbStore){
-        //console.log(dbStore[1].dataValues);
         res.json(dbStore);
     });
 });
@@ -93,8 +88,6 @@ router.put("/stores/update/:id", function(req, res) {
         }
       }
       ).then(function(dbsupervisors) {
-        //console.log(dbsupervisors[0].dataValues);
-        //res.json(dbsupervisors);
             db.Store.update(
                 {selected:true},
                 {
@@ -119,10 +112,9 @@ router.put("/stores/update/:id", function(req, res) {
           }
       }).then(function(Super){
           
-        //console.log(Super[0].dataValues);
         storeid=Super[0].dataValues.StoreId;
         db.Supervisor.findAll().then(function (allSuper){
-            //console.log(allSuper[3].dataValues);
+    
             for(i=0;i<allSuper.length;i++)
                 if(allSuper[i].dataValues.StoreId==storeid)
                     pplSelected++;
@@ -154,23 +146,16 @@ router.put("/stores/update/:id", function(req, res) {
             res.json(dbsupervisors);
         })
     );
-      
-
 });
 
 router.get("/reports/all-stores",isAuthenticated, function(req, res) {
-    //closestHost();
-    //var myArr= [1,2];
-    //var myArr=closestHost();
-    //console.log(myArr); 
-    
+
     db.Store.findAll().then(function(dbStore) {
       
          var totalHosts=0;
          var totalGenerals=0;
-         var totalSurrounding=0;
-         
-         
+         var totalSurrounding=0; 
+
          for(i=0;i<dbStore.length;i++){
              if(dbStore[i].dataValues.status=="Host")
                  totalHosts++;
@@ -193,7 +178,6 @@ router.get("/reports/all-stores",isAuthenticated, function(req, res) {
                  distanceToClosestHost: "----"    
              };
              storesArray.push(storeEntry);
-             //console.log("pushed!");
          }
  
          for(i=0;i<storesArray.length;i++){
@@ -204,7 +188,6 @@ router.get("/reports/all-stores",isAuthenticated, function(req, res) {
                  for(j=0;j<storesArray.length;j++)
                      if(storesArray[j].status=="Host"){
                          var dist= distance(storesArray[i].lat,storesArray[i].long,storesArray[j].lat,storesArray[j].long);
-                         console.log(dist);
                          if(dist<minDist){
                              minDist=dist;
                              closestId=storesArray[j].id;
@@ -213,21 +196,10 @@ router.get("/reports/all-stores",isAuthenticated, function(req, res) {
                      }
                  storesArray[i].distanceToClosestHost=minDist.toFixed(2);
                  storesArray[i].closestHostId=closestId;
-             }
-               
-                        
+             }                
          }
-         console.log(storesArray);
-         
-     
- 
          res.render("stores-report", {stores: storesArray, totalHosts,totalGenerals,totalSurrounding});
-         //res.json({supervisors: dbsupervisors, totalHosts,participation});
      });    
- 
-     
- 
- 
  });
 
  //Temporary route for signing up Admins
@@ -253,7 +225,7 @@ router.get("/reports/all-stores",isAuthenticated, function(req, res) {
  });
 
 function closestHost(){
-    //var storesArray1=[];
+    
     db.Store.findAll().then(function(dbStore){
         var storesArray=[];
         for(i=0;i<dbStore.length;i++){
@@ -268,7 +240,6 @@ function closestHost(){
                 distanceToClosestHost: "----"    
             };
             storesArray.push(storeEntry);
-            //console.log("pushed!");
         }
 
         for(i=0;i<storesArray.length;i++){
@@ -279,7 +250,6 @@ function closestHost(){
                 for(j=0;j<storesArray.length;j++)
                     if(storesArray[j].status=="Host"){
                         var dist= distance(storesArray[i].lat,storesArray[i].long,storesArray[j].lat,storesArray[j].long);
-                        console.log(dist);
                         if(dist<minDist){
                             minDist=dist;
                             closestId=storesArray[j].id;
@@ -288,26 +258,17 @@ function closestHost(){
                     }
                 storesArray[i].distanceToClosestHost=minDist;
                 storesArray[i].closestHostId=closestId;
-            }
-              
-                       
+            }               
         }
-        //console.log(storesArray);
-        //return storesArray;
 
     });
     return storesArray1;
 }
 
-
-
-
-
 function updateStatus(){
-    //console.log("function");
     var storesArray=[];
     db.Store.findAll().then(function(dbStore){
-        //console.log(dbStore[0].dataValues);
+       
         for(i=0;i<dbStore.length;i++){
             var storeEntry={
                 id:dbStore[i].dataValues.id,
@@ -316,37 +277,24 @@ function updateStatus(){
                 long:dbStore[i].dataValues.longitude    
             };
             storesArray.push(storeEntry);
-            //console.log(storesArray);
+            
         }
         for(i=0;i<dbStore.length;i++){
             if(dbStore[i].dataValues.selected)
                 storesArray[i].status="Host"
         }
-        //console.log(storesArray);
-        // mark all the stores with Host or Surrounding lables
+        
         for(i=0;i<storesArray.length;i++)
             if(storesArray[i].status=="General")
                 for(j=i+1;j<storesArray.length;j++){
                     //checking the distances
                     if(storesArray[j].status=="Host"){
-                      /*  var xSub= storesArray[j].long - storesArray[i].long;
-                        var Ysub= storesArray[j].lat - storesArray[i].lat;
-                        var distance= Math.sqrt(Math.pow(xSub,2)+Math.pow(Ysub,2)); */
                         var dist= distance(storesArray[i].lat,storesArray[i].long,storesArray[j].lat,storesArray[j].long);
-                        //console.log(dist);
                         if(dist<15){
                             storesArray[i].status="Surrounding"; 
-                            //console.log(storesArray);
-                        }
-                         
-                        
-                    }
-
-                    
-
+                        }    
+                    }   
                 }
-                
-        //console.log(storesArray);
         // Now changing the status of our entries in database according to the evaluated array
         storesArray.forEach(function(store){
             db.Store.update({status:store.status},
@@ -355,10 +303,7 @@ function updateStatus(){
                     id:store.id
                 }
             });
-        });
-                
-
-        console.log("statuses updated");            
+        });          
     });
 }
 
@@ -378,13 +323,6 @@ function distance(lat1, lon1, lat2, lon2, unit) {
         //console.log(dist);
         return dist;
 }
-
-
-
-
-
-
-
 
 
 // Export routes for server.js to use.

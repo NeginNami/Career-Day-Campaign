@@ -72,3 +72,24 @@ and/or parameters
 6. Demonstrate basic SQL concepts (CRUD)
 7. Demonstrate links between relational objects (one-to-many or many-to-many)
 8. Demonstrate ability to write clean and commented code
+
+## Technologies, Packages and Frameworks I used: 
+* Front-end: HTML, CSS, Bootstrap, Javascript, jQuery, AJAX, Handlebars.
+* Back-end: Node.js, Express.
+* Database: MySQL, Sequelize.
+* Authentication: Passport.js
+* Overall list of packages: 
+   - bcrypt-nodejs
+   - body-parser
+   - connect-flash
+   - cookie-parser
+   - express
+   - express-handlebars
+   - express-session
+   - mysql2
+   - passport
+   - passport-local
+   - sequelize
+
+## Deployment
+This application is deployed on Heroku. [Click here for the live link.](https://www.google.com)
