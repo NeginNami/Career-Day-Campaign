@@ -23,3 +23,12 @@ text-align: center;
     margin-right:10px;
     color:green;
 }
+#report-title{
+    display: inline;
+}
+#dashboard-container{
+    margin-top: 40px;
+}
+#report-title{
+    display:inline;
+}

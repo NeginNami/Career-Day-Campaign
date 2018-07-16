@@ -1,21 +1,47 @@
 var express = require("express");
-
 var router = express.Router();
 var db = require('../models');
 
+var bcrypt = require('bcrypt-nodejs');
+var passport = require('passport');
+
+var isAuthenticated = function (req, res, next) {
+    if (req.isAuthenticated())
+      return next();
+    req.flash('error', 'You have to be logged in to access the page.');
+    res.redirect('/login');
+};
+var isAuthenticated2 = function (req, res, next) {
+    if (req.isAuthenticated())
+      return next();
+    req.flash('error', 'You have to be logged in to access the page.');
+    res.redirect('/home');
+};
 
 
 // Create all our routes and set up logic within those routes where required.
-router.get("/", function(req, res) {
-    res.render("home-page");
+router.get("/",isAuthenticated2,function(req, res) {
+    res.render("dashboard")
+});
+router.get("/home",function(req, res) {
+    res.render("home-page")
+});
+router.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
 });
 router.get("/login", function(req, res) {
     res.render("login");
 });
-router.get("/dashboard", function(req, res) {
+router.post('/login', passport.authenticate('local', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/',
+    failureFlash: true 
+}));
+router.get("/dashboard", isAuthenticated, function(req, res) {
     res.render("dashboard");
 });
-router.get("/reports/all-supervisors", function(req, res) {
+router.get("/reports/all-supervisors",isAuthenticated, function(req, res) {
 
     db.Supervisor.findAll( {include: [db.Store]}).then(function(dbsupervisors) {
    
@@ -132,7 +158,7 @@ router.put("/stores/update/:id", function(req, res) {
 
 });
 
-router.get("/reports/all-stores", function(req, res) {
+router.get("/reports/all-stores",isAuthenticated, function(req, res) {
     //closestHost();
     //var myArr= [1,2];
     //var myArr=closestHost();
@@ -202,6 +228,28 @@ router.get("/reports/all-stores", function(req, res) {
      
  
  
+ });
+
+ //Temporary route for signing up Admins
+ router.post("/signup/:username&:password",function(req,res){
+    var username =req.params.username;
+    var password=req.params.password;
+    var salt = bcrypt.genSaltSync(10);
+    var hashedPassword = bcrypt.hashSync(password, salt);
+    
+    var newAdmin = {
+      username: username,
+      salt: salt,
+      password: hashedPassword
+    };
+    
+    db.Admin.create(newAdmin).then(function() {
+      res.redirect('/')
+    }).catch(function(error) {
+      req.flash('error', "Please, choose a different username.");
+      
+    });
+
  });
 
 function closestHost(){
