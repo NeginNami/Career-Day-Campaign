@@ -17,7 +17,13 @@ var isAuthenticated2 = function (req, res, next) {
     req.flash('error', 'You have to be logged in to access the page.');
     res.redirect('/home');
 };
+/******* For authenticated users when they go to '/login' route */
+var isAuthenticated3 = function (req, res, next) {
+    if (!req.isAuthenticated())
+      return next();
 
+    res.redirect("/dashboard");
+};
 
 // Create all our routes and set up logic within those routes where required.
 router.get("/",isAuthenticated2,function(req, res) {
@@ -30,9 +36,11 @@ router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
-router.get("/login", function(req, res) {
+router.get("/login", isAuthenticated3 , function(req, res) {
     res.render("login");
 });
+
+
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/dashboard',
     failureRedirect: '/',
